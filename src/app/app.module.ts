@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GraphQLModule } from './graphql.module';
 import { UserModule } from './modules/user/user.module';
+import { environment } from 'src/environments/environment';
 
 export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   return function (state, action) {
@@ -28,7 +29,9 @@ export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
-export const metaReducers: MetaReducer<any>[] = [debug];
+export const metaReducers: MetaReducer<any>[] = !environment.prod
+  ? [debug]
+  : [];
 
 @NgModule({
   declarations: [AppComponent],

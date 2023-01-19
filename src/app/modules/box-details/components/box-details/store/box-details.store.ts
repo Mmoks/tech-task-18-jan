@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { map, Observable, switchMap, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { Box, BoxOpening } from 'graphql/generated';
 import { BoxDetailsApiService } from '../../../services/box-details-api.service';
@@ -21,7 +21,7 @@ export class BoxDetailsStore extends ComponentStore<BoxDetailsState> {
 
   constructor(
     private boxDetailsApiService: BoxDetailsApiService,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {
     super({ box: null, boxOpenings: [], loading: false });
   }
@@ -50,10 +50,19 @@ export class BoxDetailsStore extends ComponentStore<BoxDetailsState> {
             error: (e) => this.logError(e),
           }),
           tap((boxOpenings) => {
-            boxOpenings.forEach(opening => this.snackBar.open(`You won: ${opening.itemVariant?.name}!!!`, 'Got it'))
+            boxOpenings.forEach((opening) =>
+              this.snackBar.open(
+                `You won: ${opening.itemVariant?.name}!!!`,
+                'Got it'
+              )
+            );
             this.setLoading(false);
           })
         );
+      }),
+      catchError((err) => {
+        this.snackBar.open(`Error: ${err.message}`, 'Close');
+        return of(err);
       })
     );
   });
