@@ -1,0 +1,26 @@
+<mat-grid-list cols="4" rowHeight="2:1" [gutterSize]="'5px'">
+  <ng-container *ngIf="boxList$ | async as boxList">
+    <mat-grid-tile *ngFor="let item of boxList; trackBy: trackBy">
+      <mat-card class="box">
+        <mat-card-header>
+          <mat-card-title>{{ item.name }}</mat-card-title>
+          <mat-card-subtitle>{{
+            item.cost | currency : item.currency
+          }}</mat-card-subtitle>
+        </mat-card-header>
+        <img
+          class="box__image"
+          mat-card-image
+          [src]="item.iconUrl"
+          alt="Photo of a box"
+        />
+
+        <mat-card-actions class="box__actions">
+          <button mat-button color="primary" [routerLink]="['../', item.id]">
+            View
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-grid-tile>
+  </ng-container>
+</mat-grid-list>

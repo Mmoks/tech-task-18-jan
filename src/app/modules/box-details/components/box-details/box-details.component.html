@@ -1,0 +1,26 @@
+<div
+  *ngIf="{ box: box$ | async, loading: loading$ | async } as data"
+  class="box-details"
+>
+  <mat-card class="box" *ngIf="data.box as box">
+    <mat-card-header>
+      <mat-card-title>{{ box.name }}</mat-card-title>
+      <mat-card-subtitle>{{
+        box.cost | currency : box.currency
+      }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      class="box__image"
+      mat-card-image
+      [src]="box.iconUrl"
+      alt="Photo of a box"
+    />
+
+    <mat-card-actions class="box__actions">
+      <button mat-button color="primary" (click)="open(box)">
+        {{ !data.loading ? "Open" : "" }}
+        <mat-spinner *ngIf="data.loading" [diameter]="30"></mat-spinner>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,0 +1,24 @@
+<ng-container *ngIf="{ user: user$ | async, wallet: wallet$ | async } as data">
+  <mat-toolbar color="primary">
+    <span class="pointer" routerLink="/">Ancient Gaming Tech Task</span>
+    <span class="spacer"></span>
+    <button
+      *ngIf="!data.user; else userTpl"
+      mat-raised-button
+      (click)="login()"
+    >
+      Login via Steam
+    </button>
+  </mat-toolbar>
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+
+  <ng-template #userTpl>
+    <span class="wallet-amount">{{
+      data.wallet?.amount | currency : data.wallet?.currency
+    }}</span>
+    <span>{{ data.user!.name }}</span>
+  </ng-template>
+</ng-container>
